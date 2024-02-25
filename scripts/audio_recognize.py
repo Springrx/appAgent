@@ -1,6 +1,8 @@
 import pyaudio
 import wave
 import whisper
+# msvcrt库是Windows特有的
+import msvcrt
 from model import ask_gpt4v
 
 # 设置音频参数
@@ -25,10 +27,19 @@ def audio_recognize():
 
     # 开始录音
     frames = []
-    for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
-        data = stream.read(CHUNK)
-        frames.append(data)
-
+    try:
+        while True:
+            if msvcrt.kbhit():
+                if msvcrt.getch() == b'0':
+                    break
+            data = stream.read(CHUNK)
+            frames.append(data)
+    except KeyboardInterrupt:
+        pass
+    # while (input("按下0结束录音") != "0"):
+    # for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
+    #     data = stream.read(CHUNK)
+    #     frames.append(data)
     print("录音结束...")
 
     # 关闭音频流
@@ -45,7 +56,7 @@ def audio_recognize():
     waveFile.close()
     model = whisper.load_model("base")
     result = model.transcribe("output.wav")
-    # 将result过一层大模型，消除如“红桥火车站”这样的误差
+    # 将result过一层大模型，消除如“红桥火车站”这样的误差、纠正口语化的表达，比如“放歌”、“打亮”
     prompt = "This sentence was generated using a phonetic transcription tool, so there may be typos inside, and there may be recognition errors for nouns such as geographical location. Modify the typos in this sentence based on possible errors: " + result["text"]
     content = [
     {
@@ -57,3 +68,6 @@ def audio_recognize():
         msg = rsp["choices"][0]["message"]["content"]
     return msg
     # print(result["text"])
+# while True:
+#     if input("按下回车键开始录音") == "":
+#         audio_recognize()
