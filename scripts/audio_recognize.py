@@ -57,7 +57,7 @@ def audio_recognize():
     model = whisper.load_model("base")
     result = model.transcribe("output.wav")
     # 将result过一层大模型，消除如“红桥火车站”这样的误差、纠正口语化的表达，比如“放歌”、“打亮”
-    prompt = "This sentence was generated using a phonetic transcription tool, so there may be typos inside, and there may be recognition errors for nouns such as geographical location. Modify the typos in this sentence based on possible errors: " + result["text"]
+    prompt = "You are a text proofreader who helps Chinese elderly people better express their needs for operating the app. Elderly people may input some colloquial expressions in Chinese during voice operation of the app, and spelling errors may also occur during voice transcription. Your function is to correct these colloquial expressions and spelling errors more accurately and formally, in order to facilitate subsequent analysis. For example, the oral expression of an elderly person is: turn on the flashlight, the formal expression is: turn on the flashlight switch; The phonetic transcription error is '去红桥火车站', and the correct expression is '去虹桥火车站'. There is a new oral expression now, please correct it. Remember, both input and output are in Chinese:" + result["text"]
     content = [
     {
         "type": "text",
