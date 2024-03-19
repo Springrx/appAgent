@@ -147,8 +147,8 @@ class AndroidController:
         adb_command = f"adb -s {self.device} shell input tap {x} {y}"
         ret = execute_adb(adb_command)
         return ret
-    def launch_app(self, start_command):
-        adb_command = f"adb -s {self.device} shell am start -n {start_command}"
+    def launch_app(self, launch_command):
+        adb_command = f"adb -s {self.device} shell am start -n {launch_command}"
         ret = execute_adb(adb_command)
         return ret
 
