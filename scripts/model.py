@@ -23,16 +23,15 @@ def ask_gpt4v(content):
         "temperature": configs["TEMPERATURE"],
         "max_tokens": configs["MAX_TOKENS"]
     }
-    print('kctest')
     response = requests.post(configs["OPENAI_API_BASE"], headers=headers, json=payload)
     print(response.json())
     if "error" not in response.json():
         usage = response.json()["usage"]
         prompt_tokens = usage["prompt_tokens"]
         completion_tokens = usage["completion_tokens"]
-        print_with_color(f"Request cost is "
-                         f"${'{0:.2f}'.format(prompt_tokens / 1000 * 0.01 + completion_tokens / 1000 * 0.03)}",
-                         "yellow")
+        # print_with_color(f"Request cost is "
+        #                  f"${'{0:.2f}'.format(prompt_tokens / 1000 * 0.01 + completion_tokens / 1000 * 0.03)}",
+        #                  "yellow")
     return response.json()
 
 
