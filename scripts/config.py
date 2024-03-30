@@ -1,7 +1,7 @@
 import os
 import yaml
 
-def load_config(config_path="./config.yaml"):
+def load_config(config_path="../config.yaml"):
 # def load_config(config_path="./config.yaml"):
     configs = dict(os.environ)
     with open(config_path, "r") as file:
